@@ -27,6 +27,405 @@
             </div>
         </div>
 
+        <!-- Méthode Traditionnelle Search Component -->
+<!-- Copy this entire block to any page where you want the search feature -->
+
+<div class="mt-search-container">
+    <div class="mt-search-box">
+        <input type="text" id="mtSearchInput" placeholder="Enter your beer name..." />
+        <button id="mtSearchBtn">Check if my beer is Méthode Traditionnelle</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="mtModal" class="mt-modal">
+    <div class="mt-modal-content">
+        <span class="mt-close">&times;</span>
+        <div class="mt-modal-body">
+            <h2>🎺 AND HIS NAME IS... 🎺</h2>
+            <div class="mt-cena-text">
+                <div class="mt-cena-line">JOHN CENA!</div>
+                <div class="mt-result-text">Your beer is NOT Méthode Traditionnelle certified!</div>
+                <div class="mt-reason">Because the entire program collapsed and nobody uses it anymore! 🍺</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confetti Canvas -->
+<canvas id="mtConfetti"></canvas>
+
+<!-- Audio -->
+<audio id="mtAudio" preload="auto">
+    <source src="john-cena-the-time-is-now-short.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<style>
+/* Méthode Traditionnelle Search Styles */
+.mt-search-container {
+    margin: 2rem auto;
+    text-align: center;
+    max-width: 600px;
+}
+
+.mt-search-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#mtSearchInput {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#mtSearchInput:focus {
+    border-color: #007acc;
+}
+
+#mtSearchBtn {
+    padding: 12px 20px;
+    background: #007acc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
+}
+
+#mtSearchBtn:hover {
+    background: #005c99;
+}
+
+/* Modal Styles */
+.mt-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    animation: mtFadeIn 0.3s;
+}
+
+.mt-modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: mtSlideIn 0.5s;
+    overflow: hidden;
+}
+
+.mt-modal-body {
+    padding: 2rem;
+    text-align: center;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+    background-size: 400% 400%;
+    animation: mtGradient 2s ease infinite;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.mt-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 1;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.mt-close:hover,
+.mt-close:focus {
+    color: #000;
+}
+
+.mt-modal-body h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    animation: mtBounce 1s infinite;
+}
+
+.mt-cena-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.mt-cena-line {
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 1rem 0;
+    animation: mtPulse 1s infinite;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.mt-result-text {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    font-weight: bold;
+}
+
+.mt-reason {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    opacity: 0.9;
+}
+
+/* Confetti Canvas */
+#mtConfetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+}
+
+/* Animations */
+@keyframes mtFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes mtSlideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes mtBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes mtPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes mtGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mt-search-box {
+        flex-direction: column;
+    }
+    
+    #mtSearchInput {
+        width: 100%;
+    }
+    
+    .mt-cena-line {
+        font-size: 2rem;
+    }
+    
+    .mt-modal-content {
+        margin: 20% auto;
+        width: 95%;
+    }
+}
+</style>
+
+<script>
+// Méthode Traditionnelle Search JavaScript
+(function() {
+    // Confetti animation
+    class Confetti {
+        constructor(canvas) {
+            this.canvas = canvas;
+            this.ctx = canvas.getContext('2d');
+            this.particles = [];
+            this.animationId = null;
+            
+            this.colors = [
+                '#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', 
+                '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3'
+            ];
+        }
+        
+        resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+        }
+        
+        createParticle() {
+            return {
+                x: Math.random() * this.canvas.width,
+                y: -10,
+                size: Math.random() * 8 + 4,
+                speedX: (Math.random() - 0.5) * 6,
+                speedY: Math.random() * 3 + 2,
+                rotation: Math.random() * 360,
+                rotationSpeed: (Math.random() - 0.5) * 10,
+                color: this.colors[Math.floor(Math.random() * this.colors.length)],
+                opacity: 1
+            };
+        }
+        
+        start() {
+            this.canvas.style.display = 'block';
+            this.resize();
+            
+            // Create initial burst
+            for (let i = 0; i < 100; i++) {
+                this.particles.push(this.createParticle());
+            }
+            
+            this.animate();
+            
+            // Add more particles over time
+            this.particleInterval = setInterval(() => {
+                for (let i = 0; i < 5; i++) {
+                    this.particles.push(this.createParticle());
+                }
+            }, 100);
+        }
+        
+        stop() {
+            this.canvas.style.display = 'none';
+            this.particles = [];
+            if (this.animationId) {
+                cancelAnimationFrame(this.animationId);
+            }
+            if (this.particleInterval) {
+                clearInterval(this.particleInterval);
+            }
+        }
+        
+        animate() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+                const particle = this.particles[i];
+                
+                // Update position
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                particle.rotation += particle.rotationSpeed;
+                particle.speedY += 0.1; // gravity
+                
+                // Fade out as it falls
+                if (particle.y > this.canvas.height * 0.8) {
+                    particle.opacity -= 0.02;
+                }
+                
+                // Remove if off screen or faded
+                if (particle.y > this.canvas.height + 10 || particle.opacity <= 0) {
+                    this.particles.splice(i, 1);
+                    continue;
+                }
+                
+                // Draw particle
+                this.ctx.save();
+                this.ctx.globalAlpha = particle.opacity;
+                this.ctx.translate(particle.x, particle.y);
+                this.ctx.rotate(particle.rotation * Math.PI / 180);
+                this.ctx.fillStyle = particle.color;
+                this.ctx.fillRect(-particle.size/2, -particle.size/2, particle.size, particle.size);
+                this.ctx.restore();
+            }
+            
+            this.animationId = requestAnimationFrame(() => this.animate());
+        }
+    }
+    
+    // Initialize components
+    const modal = document.getElementById('mtModal');
+    const searchBtn = document.getElementById('mtSearchBtn');
+    const searchInput = document.getElementById('mtSearchInput');
+    const closeBtn = document.querySelector('.mt-close');
+    const audio = document.getElementById('mtAudio');
+    const confettiCanvas = document.getElementById('mtConfetti');
+    
+    const confetti = new Confetti(confettiCanvas);
+    
+    // Event handlers
+    function showModal() {
+        modal.style.display = 'block';
+        confetti.start();
+        
+        // Play audio (may be blocked by browser autoplay policy)
+        audio.currentTime = 0;
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                // Autoplay was prevented, user needs to interact first
+                console.log('Audio autoplay prevented:', error);
+            });
+        }
+    }
+    
+    function hideModal() {
+        modal.style.display = 'none';
+        confetti.stop();
+        audio.pause();
+        audio.currentTime = 0;
+    }
+    
+    // Search button click
+    searchBtn.addEventListener('click', showModal);
+    
+    // Enter key in search input
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            showModal();
+        }
+    });
+    
+    // Close modal
+    closeBtn.addEventListener('click', hideModal);
+    
+    // Click outside modal to close
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            hideModal();
+        }
+    });
+    
+    // Escape key to close
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            hideModal();
+        }
+    });
+    
+    // Resize confetti canvas
+    window.addEventListener('resize', () => {
+        confetti.resize();
+    });
+})();
+</script>
+
         <div class="main-content">
             <h2>On Méthode Gueuze, The Disagreement with HORAL, and A New Way Forward</h2>
 
