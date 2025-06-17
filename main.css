@@ -577,13 +577,15 @@ li {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.85);
     animation: mtFadeIn 0.3s;
+    align-items: center;
+    justify-content: center;
 }
 
 .mt-modal-content {
     background-color: #fefefe;
-    margin: 10% auto;
+    margin: 0;
     padding: 0;
     border-radius: 8px;
     width: 90%;
@@ -591,6 +593,7 @@ li {
     position: relative;
     animation: mtSlideIn 0.5s;
     overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .mt-modal-body {
@@ -604,21 +607,33 @@ li {
 }
 
 .mt-close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
     position: absolute;
     right: 15px;
-    top: 10px;
-    z-index: 1;
+    top: 15px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    text-shadow: none;
     cursor: pointer;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.8);
 }
 
 .mt-close:hover,
 .mt-close:focus {
+    background: #fff;
     color: #000;
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .mt-modal-body h2 {
@@ -792,7 +807,7 @@ li {
     }
     
     .mt-modal-content {
-        margin: 20% auto;
         width: 95%;
+        margin: 0;
     }
 }
