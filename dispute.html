@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Méthode Traditionnelle</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Méthode Traditionnelle</h1>
+            
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/standards">Standards</a>
+                <a href="/history">History</a>
+            </div>
+        </header>
+
+        <div class="logos">
+            <div class="logo">
+                <img src="mt-logo.jpg" alt="M.T. Logo">
+            </div>
+            <div class="logo">
+                <img src="mt3-logo.jpg" alt="M.T. III Logo">
+            </div>
+        </div>
+
+        <!-- Méthode Traditionnelle Search Component -->
+<!-- Copy this entire block to any page where you want the search feature -->
+
+<div class="mt-search-container">
+    <div class="mt-search-box">
+        <input type="text" id="mtSearchInput" class="mt-search-input" placeholder="Enter your beer name..." />
+        <button id="mtSearchBtn" class="mt-search-button">Check if my beer is Méthode Traditionnelle</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="mtModal" class="mt-modal">
+    <div class="mt-modal-content">
+        <span class="mt-close">&times;</span>
+        <div class="mt-modal-body">
+            <h2>🎺 ABSOLUTELY NOT 🎺</h2>
+            <div class="mt-cena-text">
+                <div class="mt-cena-line">LMAO YOU REALLY THOUGHT</div>
+                <div class="mt-result-text">Your beer is NOT Méthode Traditionnelle certified!</div>
+                <div class="mt-reason">Because the entire program collapsed and nobody cares about it anymore! 🍺</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confetti Canvas -->
+<canvas id="mtConfetti"></canvas>
+
+<!-- Audio -->
+<audio id="mtAudio" preload="auto">
+    <source src="john-cena-the-time-is-now-short.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<style>
+/* Méthode Traditionnelle Search Styles */
+.mt-search-container {
+    margin: 2rem auto;
+    text-align: center;
+    max-width: 600px;
+}
+
+.mt-search-box {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#mtSearchInput {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#mtSearchInput:focus {
+    border-color: #007acc;
+}
+
+#mtSearchBtn {
+    padding: 12px 20px;
+    background: #007acc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
+}
+
+#mtSearchBtn:hover {
+    background: #005c99;
+}
+
+/* Modal Styles */
+.mt-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    animation: mtFadeIn 0.3s;
+}
+
+.mt-modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 0;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    animation: mtSlideIn 0.5s;
+    overflow: hidden;
+}
+
+.mt-modal-body {
+    padding: 2rem;
+    text-align: center;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f9ca24);
+    background-size: 400% 400%;
+    animation: mtGradient 2s ease infinite;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.mt-close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    z-index: 1;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.mt-close:hover,
+.mt-close:focus {
+    color: #000;
+}
+
+.mt-modal-body h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    animation: mtBounce 1s infinite;
+}
+
+.mt-cena-text {
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.mt-cena-line {
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 1rem 0;
+    animation: mtPulse 1s infinite;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.mt-result-text {
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    font-weight: bold;
+}
+
+.mt-reason {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    opacity: 0.9;
+}
+
+/* Confetti Canvas */
+#mtConfetti {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    display: none;
+}
+
+/* Animations */
+@keyframes mtFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes mtSlideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes mtBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes mtPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes mtGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mt-search-box {
+        flex-direction: column;
+    }
+    
+    #mtSearchInput {
+        width: 100%;
+    }
+    
+    .mt-cena-line {
+        font-size: 2rem;
+    }
+    
+    .mt-modal-content {
+        margin: 20% auto;
+        width: 95%;
+    }
+}
+</style>
+
+<script>
+// Méthode Traditionnelle Search JavaScript
+(function() {
+    // Confetti animation
+    class Confetti {
+        constructor(canvas) {
+            this.canvas = canvas;
+            this.ctx = canvas.getContext('2d');
+            this.particles = [];
+            this.animationId = null;
+            this.frameCount = 0;
+            
+            // Detect mobile and low-end devices
+            this.isMobile = window.innerWidth <= 768;
+            this.isLowEnd = this.detectLowEndDevice();
+            
+            // Adjust performance settings based on device
+            this.performanceMode = this.isMobile || this.isLowEnd;
+            
+            this.colors = [
+                '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
+                '#FF00FF', '#00FFFF', '#FFA500', '#FF1493',
+                '#FFD700', '#7FFF00', '#FF69B4', '#00FF7F',
+                '#39FF14', '#FF3131', '#1F51FF', '#FF44CC'
+            ];
+        }
+        
+        detectLowEndDevice() {
+            // Simple heuristics to detect low-end devices
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            
+            if (!gl) return true; // No WebGL support = low-end
+            
+            // Check for common low-end GPU indicators
+            const renderer = gl.getParameter(gl.RENDERER) || '';
+            const vendor = gl.getParameter(gl.VENDOR) || '';
+            
+            // Known low-end patterns
+            const lowEndPatterns = [
+                'adreno 3', 'adreno 4', 'mali-4', 'mali-t', 'powervr sgx',
+                'intel hd 3000', 'intel hd 4000'
+            ];
+            
+            return lowEndPatterns.some(pattern => 
+                renderer.toLowerCase().includes(pattern) || 
+                vendor.toLowerCase().includes(pattern)
+            );
+        }
+        
+        createParticle(isInitial = false) {
+            const centerX = this.canvas.width / 2;
+            const centerY = this.canvas.height / 2;
+            const angle = Math.random() * Math.PI * 2;
+            
+            // Drastically reduce particles on performance mode
+            const speedMultiplier = this.performanceMode ? 0.6 : 1;
+            const speed = isInitial ? 
+                (Math.random() * 12 + 6) * speedMultiplier : 
+                (Math.random() * 3 + 2) * speedMultiplier;
+            
+            const size = this.performanceMode ? 
+                Math.random() * 6 + 4 : // Much smaller on mobile
+                Math.random() * 10 + 8;
+
+            return {
+                x: isInitial ? centerX : Math.random() * this.canvas.width,
+                y: isInitial ? centerY : -10,
+                size: size,
+                speedX: isInitial ? 
+                    Math.cos(angle) * speed : 
+                    (Math.random() - 0.5) * 4,
+                speedY: isInitial ? 
+                    Math.sin(angle) * speed : 
+                    Math.random() * 2 + 1,
+                rotation: Math.random() * 360,
+                rotationSpeed: this.performanceMode ? 
+                    (Math.random() - 0.5) * 6 : // Slower rotation
+                    (Math.random() - 0.5) * 12,
+                color: this.colors[Math.floor(Math.random() * this.colors.length)],
+                opacity: 1,
+                shape: 'square', // Always square for better performance
+                sparkle: this.performanceMode ? false : Math.random() > 0.3,
+                glowSize: this.performanceMode ? 0 : Math.random() * 8 + 3, // No glow on mobile
+                width: size,
+                height: size
+            };
+        }
+        
+        start() {
+            this.canvas.style.display = 'block';
+            this.resize();
+            
+            // Drastically reduce particle count based on device capability
+            let particleCount;
+            if (this.isLowEnd) {
+                particleCount = 20; // Very few for low-end devices
+            } else if (this.isMobile) {
+                particleCount = 40; // Moderate for mobile
+            } else {
+                particleCount = 80; // Reduced even for desktop
+            }
+            
+            for (let i = 0; i < particleCount; i++) {
+                this.particles.push(this.createParticle(true));
+            }
+            
+            this.animate();
+            
+            // Reduce continuous particles aggressively
+            this.particleInterval = setInterval(() => {
+                const newParticles = this.isLowEnd ? 0 : (this.isMobile ? 1 : 2);
+                for (let i = 0; i < newParticles; i++) {
+                    this.particles.push(this.createParticle(false));
+                }
+            }, this.performanceMode ? 200 : 100); // Slower spawn rate
+        }
+        
+        animate() {
+            // Aggressive frame skipping on mobile
+            if (this.performanceMode) {
+                if (this.isLowEnd && this.frameCount++ % 4 !== 0) {
+                    this.animationId = requestAnimationFrame(() => this.animate());
+                    return;
+                } else if (this.isMobile && this.frameCount++ % 3 !== 0) {
+                    this.animationId = requestAnimationFrame(() => this.animate());
+                    return;
+                }
+            }
+
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            // Limit particle count in real-time
+            const maxParticles = this.isLowEnd ? 15 : (this.isMobile ? 30 : 60);
+            if (this.particles.length > maxParticles) {
+                this.particles.splice(maxParticles);
+            }
+            
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+                const particle = this.particles[i];
+                
+                // Update position
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                particle.rotation += particle.rotationSpeed;
+                particle.speedY += 0.15; // Reduced gravity
+                
+                // Skip wave motion on mobile entirely
+                if (!this.performanceMode) {
+                    particle.x += Math.sin(particle.y * 0.01) * 0.8;
+                }
+                
+                // Faster fade out to reduce particle lifetime
+                if (particle.y > this.canvas.height * 0.6) {
+                    particle.opacity -= this.performanceMode ? 0.05 : 0.03;
+                }
+                
+                // Remove if off screen or faded
+                if (particle.y > this.canvas.height + 10 || particle.opacity <= 0) {
+                    this.particles.splice(i, 1);
+                    continue;
+                }
+                
+                // Simplified rendering for mobile
+                this.ctx.save();
+                
+                // Disable expensive effects on mobile
+                if (!this.performanceMode && particle.glowSize > 0) {
+                    this.ctx.shadowBlur = particle.glowSize;
+                    this.ctx.shadowColor = particle.color;
+                }
+                
+                this.ctx.fillStyle = particle.color;
+                this.ctx.globalAlpha = particle.opacity;
+                
+                // Simplified sparkle on mobile
+                if (particle.sparkle && !this.performanceMode) {
+                    const sparkleOpacity = (Math.sin(Date.now() * 0.01) + 1) * 0.8;
+                    this.ctx.globalAlpha = particle.opacity * sparkleOpacity;
+                }
+
+                this.ctx.translate(particle.x, particle.y);
+                
+                // Skip rotation on low-end devices
+                if (!this.isLowEnd) {
+                    this.ctx.rotate(particle.rotation * Math.PI / 180);
+                }
+                
+                // Always use simple rectangles
+                this.ctx.fillRect(-particle.width/2, -particle.height/2, particle.width, particle.height);
+                
+                this.ctx.restore();
+            }
+            
+            this.animationId = requestAnimationFrame(() => this.animate());
+        }
+        
+        stop() {
+            this.canvas.style.display = 'none';
+            this.particles = [];
+            if (this.animationId) {
+                cancelAnimationFrame(this.animationId);
+                this.animationId = null;
+            }
+            if (this.particleInterval) {
+                clearInterval(this.particleInterval);
+                this.particleInterval = null;
+            }
+        }
+        
+        resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            
+            // Force canvas to use device pixel ratio for better performance
+            const dpr = this.performanceMode ? 1 : (window.devicePixelRatio || 1);
+            const rect = this.canvas.getBoundingClientRect();
+            
+            this.canvas.width = rect.width * dpr;
+            this.canvas.height = rect.height * dpr;
+            this.ctx.scale(dpr, dpr);
+            
+            this.canvas.style.width = rect.width + 'px';
+            this.canvas.style.height = rect.height + 'px';
+        }
+    }
+    
+    // Initialize components
+    const modal = document.getElementById('mtModal');
+    const searchBtn = document.getElementById('mtSearchBtn');
+    const searchInput = document.getElementById('mtSearchInput');
+    const closeBtn = document.querySelector('.mt-close');
+    const audio = document.getElementById('mtAudio');
+    const confettiCanvas = document.getElementById('mtConfetti');
+    
+    const confetti = new Confetti(confettiCanvas);
+    
+    // Event handlers
+    function showModal() {
+        modal.style.display = 'flex';
+        confetti.start();
+        
+        // Play audio (may be blocked by browser autoplay policy)
+        audio.currentTime = 0;
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log('Audio autoplay prevented:', error);
+            });
+        }
+    }
+    
+    function hideModal() {
+        modal.style.display = 'none';
+        confetti.stop();
+        audio.pause();
+        audio.currentTime = 0;
+    }
+    
+    // Search button click
+    searchBtn.addEventListener('click', showModal);
+    
+    // Enter key in search input
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            showModal();
+        }
+    });
+    
+    // Close modal
+    closeBtn.addEventListener('click', hideModal);
+    
+    // Click outside modal to close
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            hideModal();
+        }
+    });
+    
+    // Escape key to close
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'block') {
+            hideModal();
+        }
+    });
+    
+    // Resize confetti canvas
+    window.addEventListener('resize', () => {
+        confetti.resize();
+    });
+})();
+</script>
+
+        <div class="main-content">
+            <h2>On Méthode Gueuze, The Disagreement with HORAL, and A New Way Forward</h2>
+
+            <p>This post is to announce the resolution of the disagreement with HORAL over the term "Méthode Gueuze" and a new way forward for categorizing Lambic or G(u)euze inspired beer made outside of the traditional region of Belgium.</p>
+
+            <p>At least in recent years, if not longer ago, there has been some uncertainty and uneasiness about what brewers outside of Brussels and the Pajottenland should call (or not call) their Lambic or G(u)euze inspired beer. By and large, brewers have the utmost respect for this tradition and do not intend to offend it. The struggle comes from attempting to say where the inspiration came from, and how the beer was made, without using the actual terms "Lambic" or "G(u)euze" in the name or style description for the beer. Few, if any, styles of beer conjure up passionate responses on this topic the way that Lambic does. For instance, brewers all over the world call their beer Pilsner without the brewers of Bohemia taking exception.</p>
+
+            <p>The passion behind Lambic terminology is certainly warranted, and it is completely understandable for Lambic brewers to feel protective of their history, tradition, and terminology. There is perhaps no style of beer more closely associated with place than Lambic. Not only are there centuries of history rooting the beer to a specific region, but the method of production and nature of the fermentation leads to beer that is uniquely tied to place. It is both expected and admirable that the traditional producers of Lambic hold tightly to the terminology behind their product and its cultural heritage.</p>
+
+            <p>Last year, there was an attempt to deal with the issue of what to call Lambic or G(u)euze inspired beer made outside the traditional region. The attempt was the term "Méthode Gueuze", and by logical extension, the term "Méthode Lambic". Méthode Gueuze was meant to describe beer made in accordance with the traditional process of making G(u)euze, but in a geographic location outside the traditional region. Its creation can be analogized to "Méthode Champenoise" in the wine world.</p>
+
+            <p>Ultimately, the term "Méthode Gueuze" (and by extension "Méthode Lambic") proved unacceptable for a portion of the traditional Lambic producers, particularly the members of the High Council for Artisanal Lambic Beers (HORAL). The disagreement over Méthode Gueuze came to a head earlier this year, and since then, an effort has been made to reach a consensus.</p>
+
+            <p>When Méthode Gueuze was created, it had two goals it sought to accomplish: 1) Provide stylistic terminology for non-Belgian brewers making beer in accordance with the traditional method of producing G(u)euze; and 2) Achieve this first goal in a manner that was respectful of and acceptable to the traditional producers in Belgium. While Méthode Gueuze arguably succeeded on its first goal, it is obvious that it failed on its second. A solution to the terminology issue that draws the ire of a significant swath of the traditional Lambic community is just not acceptable.</p>
+
+            <p>It was in this spirit that HORAL was consulted in coming up with an alternative for Méthode Gueuze. In reaching an alternative, it became very apparent that HORAL highly objected to the specific words "Lambic" and "G(u)euze" being used in the name and/or style description for the beer. They felt that confusion would arise and that their tradition would be watered down and co-opted. Again, while this was never the intent of Méthode Gueuze, the effort to solve the Lambic terminology issue must be deemed a failure if the result is acrimony and discord between non-Belgian brewers and traditional Lambic makers.</p>
+
+            <p>While cooperating with HORAL and treating their concerns seriously, HORAL proposed an alternative to Méthode Gueuze, which satisfies the two previously stated goals. That alternative is "Méthode Traditionnelle". Méthode Traditionnelle is designed to refer to spontaneously fermented beers made in accordance with the traditional method, but outside the traditional region.</p>
+
+            <div class="quote">
+                <p>HORAL has no issue with defining Méthode Traditionnelle as beer inspired by "Lambic" or "G(u)euze". In other words, they have no issue with using "Lambic" and "G(u)euze" by name in defining the term. Their specific issue is using "Lambic" or "G(u)euze" in the name or style description for the beer. Méthode Traditionnelle clearly does not do this. Thus, the term was constructively proposed by HORAL as an alternative solution to a problem everyone agreed existed -- that is, what to call beer made in the traditional method outside the traditional region.</p>
+            </div>
+
+            <p>The intent has always been to truthfully and accurately refer to where the inspiration and production methods come from (Lambic and G(u)euze), and to do so in a manner that is respectful of the traditional producers. While Méthode Gueuze was intended to accomplish both of these facets, the hope and expectation is that Méthode Traditionnelle will be successful in its place. Thank you very much to all the producers of traditional Lambic and G(u)euze for entertaining this topic and working cooperatively toward a positive outcome that leaves no one feeling upset or acrimonious.</p>
+
+            <h3>Defining & Contextualizing A New Way Forward</h3>
+
+            <p>The paragraphs and points below define Méthode Traditionnelle, as well as the context in which it fits. In terms of its definition, it is important to first note what it is not. <strong>It is not a stand in for all spontaneously fermented beer.</strong> Méthode Traditionnelle merely refers to the relatively small subset of 100% spontaneously fermented beer made according to the process and tradition of Belgian Lambic and G(u)euze.</p>
+
+            <p>There is a world of creativity and opportunities when it comes to spontaneous fermentation. There really should be no limiting factors aside from no yeast or bacteria pitched. Méthode Traditionnelle is not designed to limit creativity or choices, and it should not be viewed as superior to any other type of spontaneously fermented beer. It is primarily a functional term used to solve the issue of referring to Lambic and G(u)euze style beer, without using the words "Lambic" and "G(u)euze" by name.</p>
+
+            <p>Also, Méthode Traditionnelle should not be viewed as an effort to "clone" Belgium. Differences in water chemistry, grain composition, hop varieties, microflora, and climate obviously exist all over the world. The fact that Méthode Traditionnelle is spontaneously fermented basically guarantees that it will be distinct from Belgian Lambic and G(u)euze. This is a good thing! Regional variance and connection to place are attributes that make all forms of spontaneous fermentation special and interesting, and Méthode Traditionnelle, despite its connection to the Belgian tradition, is no different.</p>
+
+            <p>If your brewery is interested in these traditional methods of spontaneous fermentation, consider this an open invitation to use these new certification marks in accordance with the guidelines. To view the standards and register to use the marks, please <a href="standards.html">click HERE</a>.</p>
+        </div>
+    </div>
+</body>
+</html>
