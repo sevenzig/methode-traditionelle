@@ -130,7 +130,7 @@
                 
                 <h1 class="post-title">BREAKING: Méthode Traditionnelle Society RELAUNCHES with new 47-page application process and $500 annual membership fee!</h1>
                 
-                <p><strong>ANNOUNCEMENT: The Phoenix Rises from the Ashes</strong></p>
+                <h3 style="text-align: center;">The Phoenix Rises from the Ashes!!</h3>
 
                 <p>Hey fellow spontaneous fermentation connoisseurs and turbid mash enthusiasts!</p>
 
@@ -238,8 +238,139 @@
 
                     <p><strong>EDIT 3</strong>: Yes, we know Hill Farmstead makes amazing spontaneous ales without any certification. That's exactly the problem we're trying to solve.</p>
                 </div>
+
+                <div class="special-offer">
+                    <h2>🚨 APPLY NOW! 🚨</h2>
+                    <p><strong>Ready to join the elite ranks of certified gatekeepers?</strong> Fill out our exclusive pre-application below to receive your 47-page application packet and begin your journey toward true spontaneous fermentation enlightenment!</p>
+                </div>
+
+                <div class="form-section">
+                    <form id="registration-form">
+                        <div class="form-group">
+                            <label for="email">Email Address (we'll spam you with premium barrel offers) <span class="required">*</span></label>
+                            <input type="email" id="email" name="email" placeholder="definitely.not.using.lallemand@brewery.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="first-name">First Name (preferably something pretentious) <span class="required">*</span></label>
+                            <input type="text" id="first-name" name="first-name" placeholder="Chadwick" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="last-name">Last Name (bonus points if hyphenated) <span class="required">*</span></label>
+                            <input type="text" id="last-name" name="last-name" placeholder="Bretton-Brewsworth III" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="brewery-name">Brewery Name (must sound artisanal) <span class="required">*</span></label>
+                            <input type="text" id="brewery-name" name="brewery-name" placeholder="Ancestral Terroir Cellars & Philosophy" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="net-worth">Annual Household Income (peasants need not apply)</label>
+                            <select id="net-worth" name="net-worth">
+                                <option value="">Select your bracket</option>
+                                <option value="barely-middle-class">$50k-100k (sorry, not exclusive enough)</option>
+                                <option value="getting-warmer">$100k-250k (maybe with a co-signer)</option>
+                                <option value="acceptable">$250k-500k (acceptable but we'll judge you)</option>
+                                <option value="preferred">$500k+ (now we're talking)</option>
+                                <option value="daddy-money">"My trust fund pays for everything" (perfect!)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="philosophy-degree">Highest Philosophy/Liberal Arts Degree Achieved</label>
+                            <select id="philosophy-degree" name="philosophy-degree">
+                                <option value="">Select your enlightenment level</option>
+                                <option value="none">No degree (how do you even appreciate beer?)</option>
+                                <option value="bachelors">Bachelor's (barely adequate)</option>
+                                <option value="masters">Master's (getting there)</option>
+                                <option value="phd">PhD (excellent for overthinking beer)</option>
+                                <option value="self-taught">"I'm self-taught" (we'll allow it if you're rich enough)</option>
+                            </select>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="agree-gatekeeping" name="agree-gatekeeping" required>
+                            <label for="agree-gatekeeping">I solemnly swear to gatekeep spontaneous fermentation and make it less accessible to regular people <span class="required">*</span></label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="overpriced-beer" name="overpriced-beer" required>
+                            <label for="overpriced-beer">I understand that good beer must be expensive and will charge accordingly <span class="required">*</span></label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="french-terms" name="french-terms" required>
+                            <label for="french-terms">I promise to use as many French words as possible when describing my beer <span class="required">*</span></label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="condescending-attitude" name="condescending-attitude" required>
+                            <label for="condescending-attitude">I will maintain a condescending attitude toward breweries that prioritize "accessibility" over "authenticity" <span class="required">*</span></label>
+                        </div>
+
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="electronic-signature" name="electronic-signature" required>
+                            <label for="electronic-signature">This digital signature is as pretentious as my beer <span class="required">*</span></label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Submit My Application for Elite Status</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('registration-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simple validation
+            const requiredFields = ['email', 'first-name', 'last-name', 'brewery-name'];
+            const checkboxes = ['agree-gatekeeping', 'overpriced-beer', 'french-terms', 'condescending-attitude', 'electronic-signature'];
+            
+            let isValid = true;
+            
+            // Check required text fields
+            requiredFields.forEach(field => {
+                if (!data[field] || data[field].trim() === '') {
+                    isValid = false;
+                }
+            });
+            
+            // Check required checkboxes
+            checkboxes.forEach(checkbox => {
+                if (!document.getElementById(checkbox).checked) {
+                    isValid = false;
+                }
+            });
+            
+            if (isValid) {
+                // Snarky success message
+                const responses = [
+                    "Congratulations! You've successfully applied to make beer more expensive and less fun!",
+                    "Thank you! Your application to join the Brotherhood of Beer Pretension has been received!",
+                    "Excellent! We'll contact you once we verify your net worth and philosophy credentials!",
+                    "Perfect! Your journey toward maximum beer gatekeeping begins now!",
+                    "Wonderful! You're one step closer to charging $60 for a 375ml bottle!"
+                ];
+                
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                alert(randomResponse);
+                
+                console.log('Form data:', data);
+                
+                // Optional: Clear the form
+                this.reset();
+            } else {
+                alert('Please fill in all required fields. How else will we properly judge your worthiness?');
+            }
+        });
+    </script>
 </body>
 </html> 
