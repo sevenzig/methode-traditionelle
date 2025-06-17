@@ -267,6 +267,13 @@
             this.animationId = null;
             this.frameCount = 0;
             
+            // Detect mobile and low-end devices
+            this.isMobile = window.innerWidth <= 768;
+            this.isLowEnd = this.detectLowEndDevice();
+            
+            // Adjust performance settings based on device
+            this.performanceMode = this.isMobile || this.isLowEnd;
+            
             this.colors = [
                 '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
                 '#FF00FF', '#00FFFF', '#FFA500', '#FF1493',
@@ -275,17 +282,43 @@
             ];
         }
         
-        resize() {
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
+        detectLowEndDevice() {
+            // Simple heuristics to detect low-end devices
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            
+            if (!gl) return true; // No WebGL support = low-end
+            
+            // Check for common low-end GPU indicators
+            const renderer = gl.getParameter(gl.RENDERER) || '';
+            const vendor = gl.getParameter(gl.VENDOR) || '';
+            
+            // Known low-end patterns
+            const lowEndPatterns = [
+                'adreno 3', 'adreno 4', 'mali-4', 'mali-t', 'powervr sgx',
+                'intel hd 3000', 'intel hd 4000'
+            ];
+            
+            return lowEndPatterns.some(pattern => 
+                renderer.toLowerCase().includes(pattern) || 
+                vendor.toLowerCase().includes(pattern)
+            );
         }
         
         createParticle(isInitial = false) {
             const centerX = this.canvas.width / 2;
             const centerY = this.canvas.height / 2;
             const angle = Math.random() * Math.PI * 2;
-            const speed = isInitial ? Math.random() * 15 + 8 : Math.random() * 4 + 2;
-            const size = Math.random() * 10 + 8;
+            
+            // Drastically reduce particles on performance mode
+            const speedMultiplier = this.performanceMode ? 0.6 : 1;
+            const speed = isInitial ? 
+                (Math.random() * 12 + 6) * speedMultiplier : 
+                (Math.random() * 3 + 2) * speedMultiplier;
+            
+            const size = this.performanceMode ? 
+                Math.random() * 6 + 4 : // Much smaller on mobile
+                Math.random() * 10 + 8;
 
             return {
                 x: isInitial ? centerX : Math.random() * this.canvas.width,
@@ -293,21 +326,21 @@
                 size: size,
                 speedX: isInitial ? 
                     Math.cos(angle) * speed : 
-                    (Math.random() - 0.5) * 6,
+                    (Math.random() - 0.5) * 4,
                 speedY: isInitial ? 
                     Math.sin(angle) * speed : 
-                    Math.random() * 3 + 2,
+                    Math.random() * 2 + 1,
                 rotation: Math.random() * 360,
-                rotationSpeed: (Math.random() - 0.5) * 12,
+                rotationSpeed: this.performanceMode ? 
+                    (Math.random() - 0.5) * 6 : // Slower rotation
+                    (Math.random() - 0.5) * 12,
                 color: this.colors[Math.floor(Math.random() * this.colors.length)],
                 opacity: 1,
-                shape: Math.random() > 0.1 ? 'square' : 'circle',
-                sparkle: Math.random() > 0.3,
-                glowSize: window.innerWidth <= 768 ? 
-                    Math.random() * 8 + 5 :
-                    Math.random() * 15 + 10,
-                width: size * (0.8 + Math.random() * 0.4),
-                height: size * (0.8 + Math.random() * 0.4)
+                shape: 'square', // Always square for better performance
+                sparkle: this.performanceMode ? false : Math.random() > 0.3,
+                glowSize: this.performanceMode ? 0 : Math.random() * 8 + 3, // No glow on mobile
+                width: size,
+                height: size
             };
         }
         
@@ -315,19 +348,108 @@
             this.canvas.style.display = 'block';
             this.resize();
             
-            const particleCount = window.innerWidth <= 768 ? 75 : 110;
+            // Drastically reduce particle count based on device capability
+            let particleCount;
+            if (this.isLowEnd) {
+                particleCount = 20; // Very few for low-end devices
+            } else if (this.isMobile) {
+                particleCount = 40; // Moderate for mobile
+            } else {
+                particleCount = 80; // Reduced even for desktop
+            }
+            
             for (let i = 0; i < particleCount; i++) {
                 this.particles.push(this.createParticle(true));
             }
             
             this.animate();
             
+            // Reduce continuous particles aggressively
             this.particleInterval = setInterval(() => {
-                const newParticles = window.innerWidth <= 768 ? 2 : 4;
+                const newParticles = this.isLowEnd ? 0 : (this.isMobile ? 1 : 2);
                 for (let i = 0; i < newParticles; i++) {
                     this.particles.push(this.createParticle(false));
                 }
-            }, 100);
+            }, this.performanceMode ? 200 : 100); // Slower spawn rate
+        }
+        
+        animate() {
+            // Aggressive frame skipping on mobile
+            if (this.performanceMode) {
+                if (this.isLowEnd && this.frameCount++ % 4 !== 0) {
+                    this.animationId = requestAnimationFrame(() => this.animate());
+                    return;
+                } else if (this.isMobile && this.frameCount++ % 3 !== 0) {
+                    this.animationId = requestAnimationFrame(() => this.animate());
+                    return;
+                }
+            }
+
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            
+            // Limit particle count in real-time
+            const maxParticles = this.isLowEnd ? 15 : (this.isMobile ? 30 : 60);
+            if (this.particles.length > maxParticles) {
+                this.particles.splice(maxParticles);
+            }
+            
+            for (let i = this.particles.length - 1; i >= 0; i--) {
+                const particle = this.particles[i];
+                
+                // Update position
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                particle.rotation += particle.rotationSpeed;
+                particle.speedY += 0.15; // Reduced gravity
+                
+                // Skip wave motion on mobile entirely
+                if (!this.performanceMode) {
+                    particle.x += Math.sin(particle.y * 0.01) * 0.8;
+                }
+                
+                // Faster fade out to reduce particle lifetime
+                if (particle.y > this.canvas.height * 0.6) {
+                    particle.opacity -= this.performanceMode ? 0.05 : 0.03;
+                }
+                
+                // Remove if off screen or faded
+                if (particle.y > this.canvas.height + 10 || particle.opacity <= 0) {
+                    this.particles.splice(i, 1);
+                    continue;
+                }
+                
+                // Simplified rendering for mobile
+                this.ctx.save();
+                
+                // Disable expensive effects on mobile
+                if (!this.performanceMode && particle.glowSize > 0) {
+                    this.ctx.shadowBlur = particle.glowSize;
+                    this.ctx.shadowColor = particle.color;
+                }
+                
+                this.ctx.fillStyle = particle.color;
+                this.ctx.globalAlpha = particle.opacity;
+                
+                // Simplified sparkle on mobile
+                if (particle.sparkle && !this.performanceMode) {
+                    const sparkleOpacity = (Math.sin(Date.now() * 0.01) + 1) * 0.8;
+                    this.ctx.globalAlpha = particle.opacity * sparkleOpacity;
+                }
+
+                this.ctx.translate(particle.x, particle.y);
+                
+                // Skip rotation on low-end devices
+                if (!this.isLowEnd) {
+                    this.ctx.rotate(particle.rotation * Math.PI / 180);
+                }
+                
+                // Always use simple rectangles
+                this.ctx.fillRect(-particle.width/2, -particle.height/2, particle.width, particle.height);
+                
+                this.ctx.restore();
+            }
+            
+            this.animationId = requestAnimationFrame(() => this.animate());
         }
         
         stop() {
@@ -335,70 +457,28 @@
             this.particles = [];
             if (this.animationId) {
                 cancelAnimationFrame(this.animationId);
+                this.animationId = null;
             }
             if (this.particleInterval) {
                 clearInterval(this.particleInterval);
+                this.particleInterval = null;
             }
         }
         
-        animate() {
-            if (window.innerWidth <= 768 && this.frameCount++ % 2 !== 0) {
-                this.animationId = requestAnimationFrame(() => this.animate());
-                return;
-            }
-
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        resize() {
+            this.canvas.width = window.innerWidth;
+            this.canvas.height = window.innerHeight;
             
-            for (let i = this.particles.length - 1; i >= 0; i--) {
-                const particle = this.particles[i];
-                
-                particle.x += particle.speedX;
-                particle.y += particle.speedY;
-                particle.rotation += particle.rotationSpeed;
-                particle.speedY += 0.2;
-                
-                if (!window.innerWidth <= 768) {
-                    particle.x += Math.sin(particle.y * 0.01) * 0.8;
-                }
-                
-                if (particle.y > this.canvas.height * 0.7) {
-                    particle.opacity -= 0.03;
-                }
-                
-                if (particle.y > this.canvas.height + 10 || particle.opacity <= 0) {
-                    this.particles.splice(i, 1);
-                    continue;
-                }
-                
-                this.ctx.save();
-                
-                this.ctx.shadowBlur = particle.glowSize;
-                this.ctx.shadowColor = particle.color;
-                this.ctx.fillStyle = particle.color;
-                this.ctx.globalAlpha = particle.opacity;
-                
-                if (particle.sparkle) {
-                    const sparkleOpacity = window.innerWidth <= 768 ?
-                        0.8 :
-                        (Math.sin(Date.now() * 0.01) + 1) * 0.8;
-                    this.ctx.globalAlpha = particle.opacity * sparkleOpacity;
-                }
-
-                this.ctx.translate(particle.x, particle.y);
-                this.ctx.rotate(particle.rotation * Math.PI / 180);
-                
-                if (particle.shape === 'circle') {
-                    this.ctx.beginPath();
-                    this.ctx.arc(0, 0, particle.size / 2, 0, Math.PI * 2);
-                    this.ctx.fill();
-                } else {
-                    this.ctx.fillRect(-particle.width/2, -particle.height/2, particle.width, particle.height);
-                }
-                
-                this.ctx.restore();
-            }
+            // Force canvas to use device pixel ratio for better performance
+            const dpr = this.performanceMode ? 1 : (window.devicePixelRatio || 1);
+            const rect = this.canvas.getBoundingClientRect();
             
-            this.animationId = requestAnimationFrame(() => this.animate());
+            this.canvas.width = rect.width * dpr;
+            this.canvas.height = rect.height * dpr;
+            this.ctx.scale(dpr, dpr);
+            
+            this.canvas.style.width = rect.width + 'px';
+            this.canvas.style.height = rect.height + 'px';
         }
     }
     
