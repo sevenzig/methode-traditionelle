@@ -267,10 +267,10 @@
             this.animationId = null;
             
             this.colors = [
-                '#FF0000', '#00FF00', '#0000FF', '#FFFF00', // Bright primary colors
-                '#FF00FF', '#00FFFF', '#FFA500', '#FF1493', // Bright secondary colors
-                '#FFD700', '#7FFF00', '#FF69B4', '#00FF7F', // More vibrant options
-                '#FF6B6B', '#4ECDC4', '#45B7D1', '#F9CA24'  // Original colors kept
+                '#FF0000', '#00FF00', '#0000FF', '#FFFF00',  // Bright primary colors
+                '#FF00FF', '#00FFFF', '#FFA500', '#FF1493',  // Bright secondary colors
+                '#FFD700', '#7FFF00', '#FF69B4', '#00FF7F',  // More vibrant options
+                '#39FF14', '#FF3131', '#1F51FF', '#FF44CC'   // Ultra bright neon colors
             ];
         }
         
@@ -283,8 +283,8 @@
             const centerX = this.canvas.width / 2;
             const centerY = this.canvas.height / 2;
             const angle = Math.random() * Math.PI * 2;
-            const speed = isInitial ? Math.random() * 15 + 5 : Math.random() * 3 + 2;
-            const size = Math.random() * 12 + 6; // Increased size
+            const speed = isInitial ? Math.random() * 20 + 10 : Math.random() * 5 + 3;
+            const size = Math.random() * 15 + 8; // Increased size
 
             return {
                 x: isInitial ? centerX : Math.random() * this.canvas.width,
@@ -292,16 +292,17 @@
                 size: size,
                 speedX: isInitial ? 
                     Math.cos(angle) * speed : 
-                    (Math.random() - 0.5) * 6,
+                    (Math.random() - 0.5) * 8,
                 speedY: isInitial ? 
                     Math.sin(angle) * speed : 
-                    Math.random() * 3 + 2,
+                    Math.random() * 4 + 2,
                 rotation: Math.random() * 360,
-                rotationSpeed: (Math.random() - 0.5) * 15,
+                rotationSpeed: (Math.random() - 0.5) * 20,
                 color: this.colors[Math.floor(Math.random() * this.colors.length)],
                 opacity: 1,
-                shape: Math.random() > 0.5 ? 'square' : 'circle',
-                sparkle: Math.random() > 0.7
+                shape: Math.random() > 0.3 ? 'square' : 'circle', // More squares for better visibility
+                sparkle: Math.random() > 0.5,
+                glowSize: Math.random() * 10 + 5 // Added glow effect
             };
         }
         
@@ -309,8 +310,8 @@
             this.canvas.style.display = 'block';
             this.resize();
             
-            // Create initial explosion burst
-            for (let i = 0; i < 200; i++) {
+            // Create initial explosion burst with more particles
+            for (let i = 0; i < 250; i++) {
                 this.particles.push(this.createParticle(true));
             }
             
@@ -318,7 +319,7 @@
             
             // Add more particles over time
             this.particleInterval = setInterval(() => {
-                for (let i = 0; i < 8; i++) {
+                for (let i = 0; i < 10; i++) {
                     this.particles.push(this.createParticle(false));
                 }
             }, 50);
@@ -345,14 +346,14 @@
                 particle.x += particle.speedX;
                 particle.y += particle.speedY;
                 particle.rotation += particle.rotationSpeed;
-                particle.speedY += 0.15; // Increased gravity
+                particle.speedY += 0.2; // Increased gravity
                 
                 // Add some wavey motion
-                particle.x += Math.sin(particle.y * 0.01) * 0.5;
+                particle.x += Math.sin(particle.y * 0.01) * 0.8;
                 
                 // Fade out as it falls
                 if (particle.y > this.canvas.height * 0.7) {
-                    particle.opacity -= 0.03;
+                    particle.opacity -= 0.02; // Slower fade out
                 }
                 
                 // Remove if off screen or faded
@@ -361,18 +362,21 @@
                     continue;
                 }
                 
-                // Draw particle
+                // Draw particle with glow effect
                 this.ctx.save();
                 this.ctx.globalAlpha = particle.opacity;
                 this.ctx.translate(particle.x, particle.y);
                 this.ctx.rotate(particle.rotation * Math.PI / 180);
                 
-                // Add sparkle effect
+                // Add sparkle effect with higher intensity
                 if (particle.sparkle) {
-                    const sparkleOpacity = (Math.sin(Date.now() * 0.01) + 1) * 0.5;
+                    const sparkleOpacity = (Math.sin(Date.now() * 0.01) + 1) * 0.7; // Increased base opacity
                     this.ctx.globalAlpha = particle.opacity * sparkleOpacity;
                 }
 
+                // Add glow effect
+                this.ctx.shadowBlur = particle.glowSize;
+                this.ctx.shadowColor = particle.color;
                 this.ctx.fillStyle = particle.color;
                 
                 if (particle.shape === 'circle') {
@@ -402,7 +406,7 @@
     
     // Event handlers
     function showModal() {
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
         confetti.start();
         
         // Play audio (may be blocked by browser autoplay policy)
@@ -411,7 +415,6 @@
         
         if (playPromise !== undefined) {
             playPromise.catch(error => {
-                // Autoplay was prevented, user needs to interact first
                 console.log('Audio autoplay prevented:', error);
             });
         }
